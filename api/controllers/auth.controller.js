@@ -1,4 +1,5 @@
 import User from '../models/user.model.js';
+import { errorHandler } from '../lib/error.js';
 
 export async function signup(req, res, next) {
   const { username, email, password } = req.body;
@@ -10,7 +11,7 @@ export async function signup(req, res, next) {
     email === '' ||
     password === ''
   ) {
-    return res.status(400).json({ message: 'Please enter all fields' });
+    next(errorHandler(400, 'All fields are required.'));
   }
 
   try {
