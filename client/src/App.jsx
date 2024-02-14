@@ -7,6 +7,7 @@ import SignIn from './pages/signin';
 import SignUp from './pages/signup';
 import Header from './components/header';
 import { Toaster } from 'react-hot-toast';
+import Footer from './components/footer';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />
       </Routes>
+      <Footer />
       <Toaster />
     </BrowserRouter>
   );
