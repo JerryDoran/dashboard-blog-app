@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { Footer } from 'flowbite-react';
-import {BsFacebook, BsInstagram, BsTwitter, BsLinkedin, BsLink, BsDribbble} from 'react-icons/bs'
+import {BsFacebook, BsInstagram, BsTwitter, BsLinkedin, BsDribbble} from 'react-icons/bs'
 
 
 export default function BlogFooter() {
