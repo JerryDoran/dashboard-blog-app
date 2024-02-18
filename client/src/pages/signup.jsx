@@ -94,6 +94,3 @@ export default function SignUp() {
     </section>
   );
 }
-
-
-// bg-gradient-to-r from-gray-50 via-indigo-100 to-blue-50

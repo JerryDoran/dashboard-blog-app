@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import maestro from '../assets/maestro.png';
+import { signInFailure, signInStart, signInSuccess } from '../redux/user/user-slice';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
 import {toast} from 'react-hot-toast'
@@ -8,8 +10,12 @@ import {toast} from 'react-hot-toast'
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(false);
+
+  const {error, loading} = useSelector((state) => state.user)
+
+  const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
@@ -21,15 +27,14 @@ export default function SignIn() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log(formData.username)
-
     if(!formData.email || !formData.password) {
-     return setError('Please fill in all fields');      
+     return dispatch(signInFailure('Please fill in all fields')); 
     }
     
     try {
-      setLoading(true)
-      setError(null)
+      // setLoading(true)
+      // setError(null)
+      dispatch(signInStart())
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -40,21 +45,21 @@ export default function SignIn() {
       const data = await response.json();
 
       if(data.success === false){
-        setError(data.message)     
-        setLoading(false)
-        return;   
+        // setError(data.message)     
+        // setLoading(false)
+       return dispatch(signInFailure(data.message))        
       }
 
-      setLoading(false)
-
       if(response.ok){
+        dispatch(signInSuccess(data))
         navigate('/')
       }
 
       toast.success('Successfully signed in')
     } catch (error) {
-      setError(error.message)
-      setLoading(false)
+      // setError(error.message)
+      // setLoading(false)
+      dispatch(signInFailure(error.message))
     }
   }
 
@@ -91,5 +96,3 @@ export default function SignIn() {
   );
 }
 
-
-// bg-gradient-to-r from-gray-50 via-indigo-100 to-blue-50
