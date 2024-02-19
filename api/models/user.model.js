@@ -18,11 +18,11 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Please enter a password'],
       minLength: [6, 'Your password must be at least 6 characters'],
     },
-    // profilePicture: {
-    //   type: String,
-    //   default:
-    //     'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg',
-    // },
+    profilePicture: {
+      type: String,
+      default:
+        'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg',
+    },
   },
   { timestamps: true }
 );
