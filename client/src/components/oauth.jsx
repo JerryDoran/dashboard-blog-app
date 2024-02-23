@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { signInSuccess } from "../redux/user/user-slice";
 import { useNavigate } from "react-router-dom";
 
-export default function OAuth() {
+export default function OAuth({ text }) {
   const auth = getAuth(app);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ export default function OAuth() {
       onClick={handleGoogleAuth}
     >
       <AiFillGoogleCircle className="mr-2 h-6 w-6" />
-      Sign up with Google
+      {text} with Google
     </Button>
   );
 }
