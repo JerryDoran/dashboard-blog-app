@@ -15,8 +15,6 @@ export default function Profile() {
   const [uploadError, setUploadError] = useState(null);
   // const [formData, setFormData] = useState({});
 
-  console.log(imagePercent, uploadError);
-
   function handleImageChange(e) {
     const file = e.target.files[0];
     if (file) {
