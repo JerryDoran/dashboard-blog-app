@@ -111,7 +111,7 @@ export async function googleSignin(req, res, next) {
         },
         process.env.JWT_SECRET,
         {
-          expiresIn: '1d',
+          expiresIn: '50d',
         }
       );
       const { password, ...rest } = newUser._doc;

@@ -64,3 +64,16 @@ export async function updateUser(req, res, next) {
     next(error);
   }
 }
+
+export async function deleteUser(req, res, next) {
+  if (req.user.id !== req.params.userid) {
+    return next(errorHandler(401, 'You can only delete your account'));
+  }
+
+  try {
+    await User.findByIdAndDelete(req.params.userid);
+    res.status(200).json({ success: true, message: 'User deleted' });
+  } catch (error) {
+    next(error);
+  }
+}
