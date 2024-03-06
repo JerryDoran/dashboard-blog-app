@@ -4,14 +4,18 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../redux/user/user-slice";
-import { Alert, Button, TextInput } from "flowbite-react";
+import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { storage } from "../firebase.config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { CircularProgressbar } from "react-circular-progressbar";
 import { toast } from "react-hot-toast";
 import "react-circular-progressbar/dist/styles.css";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -21,6 +25,7 @@ export default function Profile() {
   const [imagePercent, setImagePercent] = useState(0);
   const [uploadError, setUploadError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
 
@@ -117,6 +122,32 @@ export default function Profile() {
     }
   }
 
+  async function handleDeleteAccount() {
+    setShowModal(false);
+
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        dispatch(deleteUserFailure(data.message));
+        toast.error(error);
+      } else {
+        dispatch(deleteUserSuccess(data));
+        toast.success("Account successfully deleted");
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+      toast.error(error.message);
+    }
+  }
+
   return (
     <section className="mx-auto w-full max-w-md p-3">
       <h1 className="py-7 text-center text-3xl font-semibold">Profile</h1>
@@ -182,9 +213,36 @@ export default function Profile() {
         </Button>
       </form>
       <div className="mt-5 flex justify-between text-red-600">
-        <span className="cursor-pointer">Delete Account</span>
+        <span onClick={() => setShowModal(true)} className="cursor-pointer">
+          Delete Account
+        </span>
         <span className="cursor-pointer">Sign Out</span>
       </div>
+
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete your account?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={handleDeleteAccount}>
+                Yes I&apos;m sure
+              </Button>
+              <Button color="gray" onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </section>
   );
 }
