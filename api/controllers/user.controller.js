@@ -77,3 +77,14 @@ export async function deleteUser(req, res, next) {
     next(error);
   }
 }
+
+export async function signout(req, res, next) {
+  try {
+    res
+      .clearCookie('access_token')
+      .status(200)
+      .json({ success: true, message: 'Signout success' });
+  } catch (error) {
+    next(error);
+  }
+}

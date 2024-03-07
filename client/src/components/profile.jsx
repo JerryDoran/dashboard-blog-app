@@ -7,6 +7,7 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signoutUserSuccess,
 } from "../redux/user/user-slice";
 import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
@@ -148,6 +149,24 @@ export default function Profile() {
     }
   }
 
+  async function handleSignOut() {
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+        toast.error(data.message);
+      } else {
+        dispatch(signoutUserSuccess());
+        toast.success("Signout success");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return (
     <section className="mx-auto w-full max-w-md p-3">
       <h1 className="py-7 text-center text-3xl font-semibold">Profile</h1>
@@ -216,7 +235,9 @@ export default function Profile() {
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
           Delete Account
         </span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span onClick={handleSignOut} className="cursor-pointer">
+          Sign Out
+        </span>
       </div>
 
       <Modal
