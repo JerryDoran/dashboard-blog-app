@@ -48,6 +48,7 @@ export async function signin(req, res, next) {
     const token = jwt.sign(
       {
         id: validUser._id,
+        isAdmin: validUser.isAdmin,
         username: validUser.username,
         email: validUser.email,
       },
@@ -79,6 +80,7 @@ export async function googleSignin(req, res, next) {
       const token = jwt.sign(
         {
           id: user._id,
+          isAdmin: user.isAdmin,
         },
         process.env.JWT_SECRET,
         {
