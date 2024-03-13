@@ -9,6 +9,8 @@ import Header from "./components/header";
 import { Toaster } from "react-hot-toast";
 import Footer from "./components/footer";
 import Private from "./components/private";
+import AdminOnly from "./components/admin-only";
+import CreatePost from "./pages/create-post";
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route element={<Private />}>
           <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        <Route element={<AdminOnly />}>
+          <Route path="/create-post" element={<CreatePost />} />
         </Route>
         <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />

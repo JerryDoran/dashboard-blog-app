@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   updateUserStart,
   updateUserSuccess,
@@ -227,9 +228,24 @@ export default function Profile() {
           placeholder="Password"
           onChange={handleChange}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" disabled={loading}>
-          Update
+        <Button
+          type="submit"
+          gradientDuoTone="purpleToBlue"
+          disabled={loading || imageFileUploading}
+        >
+          {loading ? "Loading..." : "Update"}
         </Button>
+        {currentUser?.isAdmin && (
+          <Link to="/create-post">
+            <Button
+              type="button"
+              gradientDuoTone="purpleToPink"
+              className="w-full"
+            >
+              Create a Post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="mt-5 flex justify-between text-red-600">
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
