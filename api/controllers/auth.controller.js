@@ -54,7 +54,7 @@ export async function signin(req, res, next) {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: '1d',
+        expiresIn: '10d',
       }
     );
 
