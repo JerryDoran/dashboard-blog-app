@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Button, Table } from "flowbite-react";
+import { Table } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user);
   const [posts, setPosts] = useState([]);
+  const [showMore, setShowMore] = useState(true);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -17,6 +18,9 @@ export default function DashPosts() {
 
         if (res.ok) {
           setPosts(data.posts);
+          if (data.posts.length < 9) {
+            setShowMore(false);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -25,8 +29,26 @@ export default function DashPosts() {
     fetchPosts();
   }, [currentUser._id]);
 
+  async function handleShowMore() {
+    const startIndex = posts.length;
+    try {
+      const res = await fetch(
+        `/api/post/get-posts?userId=${currentUser._id}&startIndex=${startIndex}`,
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setPosts((prev) => [...prev, ...data.posts]);
+        if (data.posts.length < 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
-    <div className="scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 table-auto overflow-x-scroll p-3 md:mx-auto">
+    <div className="table-auto overflow-x-scroll p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 md:mx-auto">
       {currentUser.isAdmin && posts.length > 0 ? (
         <>
           <Table className="shadow-md">
@@ -82,6 +104,14 @@ export default function DashPosts() {
               ))}
             </Table.Body>
           </Table>
+          {showMore && (
+            <button
+              onClick={handleShowMore}
+              className="w-full self-center py-7 text-sm text-teal-500"
+            >
+              Show more
+            </button>
+          )}
         </>
       ) : (
         <p>You have no posts</p>
