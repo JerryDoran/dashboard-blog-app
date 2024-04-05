@@ -68,3 +68,15 @@ export async function getPosts(req, res, next) {
     next(error);
   }
 }
+
+export async function deletePost(req, res, next) {
+  if (!req.user.isAdmin || req.user?.id !== req.params.userid) {
+    return next(errorHandler(403, 'You are not allowed to delete posts'));
+  }
+  try {
+    await Post.findByIdAndDelete(req.params.postid);
+    res.status(200).json({ message: 'Post deleted' });
+  } catch (error) {
+    next(error);
+  }
+}
