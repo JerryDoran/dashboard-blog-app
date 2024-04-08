@@ -49,23 +49,21 @@ export default function DashUsers() {
   }
 
   async function handleDeleteUser() {
-    // setShowModal(false);
-    // try {
-    //   const res = await fetch(
-    //     `/api/user/delete/${userIdToDelete}/${currentUser._id}`,
-    //     {
-    //       method: "DELETE",
-    //     },
-    //   );
-    // const data = await res.json();
-    // if (!res.ok) {
-    //   console.log(data.message);
-    // } else {
-    //   setPosts((prev) => prev.filter((post) => post._id !== postIdToDelete));
-    // }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    setShowModal(false);
+    try {
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+        setShowModal(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

@@ -66,7 +66,7 @@ export async function updateUser(req, res, next) {
 }
 
 export async function deleteUser(req, res, next) {
-  if (req.user.id !== req.params.userid) {
+  if (!req.user.isAdmin && req.user.id !== req.params.userid) {
     return next(errorHandler(401, 'You can only delete your account'));
   }
 
@@ -120,14 +120,12 @@ export async function getUsers(req, res, next) {
       createdAt: { $gte: oneMonthAgo },
     });
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        users: usersWithoutPassword,
-        totalUsers,
-        lastMonthUsers,
-      });
+    res.status(200).json({
+      success: true,
+      users: usersWithoutPassword,
+      totalUsers,
+      lastMonthUsers,
+    });
   } catch (error) {
     next(error);
   }
