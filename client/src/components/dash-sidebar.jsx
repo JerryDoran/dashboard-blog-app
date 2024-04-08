@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { Sidebar } from "flowbite-react";
-import { HiArrowSmRight, HiDocument, HiUser } from "react-icons/hi";
+import {
+  HiArrowSmRight,
+  HiDocumentText,
+  HiOutlineUserGroup,
+  HiUser,
+} from "react-icons/hi";
 import { signoutUserSuccess } from "../redux/user/user-slice";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -60,12 +65,25 @@ export default function DashSidebar() {
             <Link to="/dashboard?tab=posts">
               <Sidebar.Item
                 active={tab === "posts"}
-                icon={HiDocument}
+                icon={HiDocumentText}
                 label={"Posts"}
                 labelColor="dark"
                 as="div"
               >
                 Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=users">
+              <Sidebar.Item
+                active={tab === "users"}
+                icon={HiOutlineUserGroup}
+                label={"Users"}
+                labelColor="dark"
+                as="div"
+              >
+                Users
               </Sidebar.Item>
             </Link>
           )}
